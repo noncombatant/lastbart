@@ -1,0 +1,51 @@
+<!doctype html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Last BART from {{stop_name}}</title>
+  <meta name="description" content="Last BART departures from {{stop_name}}">
+  <meta name="author" content="Jacob Hoffman-Andrews">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <style>
+    ul {
+      list-style-type: none;
+    }
+    .warning,
+    .service {
+      display: none;
+    }
+  </style>
+
+  <noscript>
+    <style>
+      .service {
+        display: block;
+       }
+    </style>
+  </noscript>
+  <script>
+    {{>stop_js}}
+  </script>
+</head>
+
+<body>
+  <div id=warning class=warning data-last-valid-date="{{last_valid_date}}">
+    Warning! Data was last valid at {{last_valid_date}}.  Check latest info at
+    <a href="http://bart.gov">http://bart.gov</a>
+  </div>
+
+  Last train departs {{stop_name}} at:
+  {{#service}}
+  <div class="service {{service_id}} {{#visible_days}}{{day}} {{/visible_days}}">
+    {{service_id}}
+    {{#departure}}
+    <ul>
+      <li>{{friendly_time}} for {{headsign}}</li>
+    </ul>
+    {{/departure}}
+  </div>
+  {{/service}}
+  </div>
+</body>
