@@ -56,9 +56,12 @@ class Stop(pystache.View):
       # visibility.
       visible_days = map(lambda x: {"day": "vd%d" % x[0]}, visible_days_tuples)
 
-      yield {"service_id": service_id,
-             "visible_days": visible_days,
-             "departure": list(self.list_departures(service_id))}
+      departures = list(self.list_departures(service_id))
+
+      if len(departures) > 0:
+        yield {"service_id": service_id,
+               "visible_days": visible_days,
+               "departure": departures}
 
   def list_departures(self, service_id):
     c = self.conn.cursor()
@@ -96,7 +99,7 @@ class Index(pystache.View):
   def stop(self):
     for stop_id, stop_name in get_stops(self.conn):
       yield {"stop_name_urlified": urlify_name(stop_name),
-             "stop_name": stop_name
+             "stop_name": re.sub("BART$", "", stop_name)
              }
     
 
