@@ -85,21 +85,26 @@ def last_valid_date(conn):
   return c.next()[0]
 
 def get_stops(conn):
-  for stop_id, stop_name in conn.execute('SELECT stop_id, stop_name FROM stops ORDER BY stop_name'):
-    yield (stop_id, stop_name)
+ for (stop_id, stop_name) in conn.execute('SELECT stop_id, stop_name FROM stops ORDER BY stop_name'):
+   yield (stop_id, stop_name)
 
-def generate_index(conn):
-  result = []
-  for (stop_id, stop_name) in get_stops(conn):
-    result.append("<a href='%s.html'>%s</a><br>\n" %
-      (urlify_name(stop_name), cgi.escape(stop_name)))
-  return "".join(result)
+class Index(pystache.View):
+  def __init__(self, conn):
+    self.conn = conn
+    super(Index, self).__init__()
+
+  def stop(self):
+    for stop_id, stop_name in get_stops(self.conn):
+      yield {"stop_name_urlified": urlify_name(stop_name),
+             "stop_name": stop_name
+             }
+    
 
 def main(argv):
   conn = sqlite3.connect('bart.sqlite')
 
   index_html = open("html/index.html", "w")
-  index_html.write(generate_index(conn))
+  index_html.write(Index(conn).render())
   index_html.close()
 
   for (stop_id, stop_name) in get_stops(conn):
