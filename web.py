@@ -22,7 +22,7 @@ def main(argv):
       self.end_headers()
       conn = sqlite3.connect('bart.sqlite')
       if self.path == "/":
-        self.wfile.write(lastbart.generate_index(conn))
+        self.wfile.write(lastbart.Index(conn).render())
       else:
         urlified_name = self.path.strip("/").rstrip(".html")
         for (stop_id, stop_name) in lastbart.get_stops(conn):

@@ -8,14 +8,18 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
 
   <style>
-    body {
+    * {
       text-decoration: none;
     }
   </style>
 </head>
 
 <body>
-  {{#stop}}
-  <a href='{{stop_name_urlified}}'>{{stop_name}}</a>
-  {{/stop}}
+  <ul>
+    {{#stop}}
+    <li>
+      <a href='{{stop_name_urlified}}'>{{stop_name}}</a>
+    </li>
+    {{/stop}}
+  </ul>
 </body>

@@ -1,2 +1,4 @@
 google_transit.zip
 bart.sqlite
+*.pyc
+html/
