@@ -19,16 +19,18 @@ def main(argv):
       reload(lastbart)
       self.send_response(200)
       self.send_header("Content-type", "text/html")
+      self.send_header("Connection", "close")
       self.end_headers()
       conn = sqlite3.connect('bart.sqlite')
       if self.path == "/":
         self.wfile.write(lastbart.Index(conn).render())
       else:
         urlified_name = self.path.strip("/").rstrip(".html")
-        for (stop_id, stop_name) in lastbart.get_stops(conn):
-          if urlified_name == lastbart.urlify_name(stop_name):
-            stop = lastbart.Stop(stop_id, stop_name, lastbart.last_valid_date(conn))
-            self.wfile.write(stop.render())
+        try:
+          stop = lastbart.Stop(urlified_name)
+          self.wfile.write(stop.render())
+        except lastbart.StopNotFound:
+          self.wfile.write("nope")
 
   httpd = SocketServer.TCPServer(("", PORT), MyHandler)
 

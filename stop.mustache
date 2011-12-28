@@ -12,7 +12,6 @@
     ul {
       list-style-type: none;
     }
-    .warning,
     .service {
       display: none;
     }
@@ -31,11 +30,6 @@
 </head>
 
 <body>
-  <div id=warning class=warning data-last-valid-date="{{last_valid_date}}">
-    Warning! Data was last valid at {{last_valid_date}}.  Check latest info at
-    <a href="http://bart.gov">http://bart.gov</a>
-  </div>
-
   Last train departs {{stop_name}} at:
   {{#service}}
   <div class="service {{service_id}} {{#visible_days}}{{day}} {{/visible_days}}">
@@ -47,5 +41,9 @@
     {{/departure}}
   </div>
   {{/service}}
+  </div>
+  <div class="last-valid">
+    Data retrieved from <a href="http://bart.gov/">bart.gov</a> on {{fetch_date}}, valid until
+    {{last_valid_date}}. <a href="http://bart.gov/stations/{{shortest_stop_id}}/schedule.aspx">Official schedule</a>
   </div>
 </body>
