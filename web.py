@@ -12,27 +12,42 @@ def main(argv):
   import SimpleHTTPServer
   import SocketServer
 
-  PORT = 8000
+  PORT = 8001
 
   class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
-    def do_GET(self):
-      reload(lastbart)
-      self.send_response(200)
-      self.send_header("Content-type", "text/html")
+    def sendheaders(self, code, type):
+      self.send_response(code)
+      self.send_header("Content-type", type)
       self.send_header("Connection", "close")
       self.end_headers()
+
+    def do_GET(self):
+      reload(lastbart)
+      
       conn = sqlite3.connect('bart.sqlite')
       if self.path == "/":
+        self.sendheaders(200, "text/html")
         self.wfile.write(lastbart.Index(conn).render())
       else:
-        urlified_name = self.path.strip("/").rstrip(".html")
+        urlified_name = self.path.strip("/")
+        urlified_name = re.sub(r"\.html$", "", urlified_name)
         try:
           stop = lastbart.Stop(urlified_name)
+          self.sendheaders(200, "text/html")
           self.wfile.write(stop.render())
         except lastbart.StopNotFound:
-          self.wfile.write("nope")
+          # Hack: return a bare file. Not necesarily safe but we only listen on
+          # localhost.
+          file = "html/" + re.sub(r"\.\.", "", urlified_name)
+          try:
+            contents = open(file).read()
+            self.sendheaders(200, "")
+            self.wfile.write(contents)
+          except IOError:
+            self.sendheaders(404, "text/plain")
+            self.wfile.write("Fourohfour")
 
-  httpd = SocketServer.TCPServer(("", PORT), MyHandler)
+  httpd = SocketServer.TCPServer(("127.0.0.1", PORT), MyHandler)
 
   print "serving at port", PORT
   httpd.serve_forever()

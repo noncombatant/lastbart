@@ -2,13 +2,45 @@ function addStyle(s) {
   var sheet = document.createElement('style')
   sheet.innerHTML = s;
   document.body.appendChild(sheet);
-  console.log("Adding ", s);
+  return sheet;
+}
+
+function elem(e) {
+  return document.getElementById(e);
+}
+
+function eachByClass(className, f) {
+  if (document.getElementsByClassName) {
+    var elems = document.getElementsByClassName(className);
+    for (i = 0; i < elems.length; i++) {
+      f(elems[i]);
+    }
+  }
+}
+
+function addClass(e, className) {
+  e.className += " " + className;
+}
+
+function removeClass(e, className) {
 }
 
 window.onload = function () {
-  twoHoursAgo = new Date(new Date() - (2 * 60 * 60 * 1000));
-  dayOfWeek = twoHoursAgo.getDay();
+  var twoHoursAgo = new Date(new Date() - (2 * 60 * 60 * 1000));
+  var dayOfWeek = twoHoursAgo.getDay();
 
-  addStyle(".vd" + dayOfWeek + " { display: block; }");
+  var todayClass = "vd" + dayOfWeek;
+  
+  eachByClass(todayClass, function(e) {
+    addClass(e, "visible");
+  });
+
+  eachByClass("service_selector", function(e) {
+    // NOTE: Do better event handling here
+    e.onclick = function() {
+      eachByClass("sid" + e.getAttribute("data-service-id"), function(f) {
+        addClass(f, "visible");
+      });
+    }
+  });
 }
-

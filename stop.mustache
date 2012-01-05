@@ -15,12 +15,19 @@
     .service {
       display: none;
     }
+    .service_selector {
+      border: 1px dotted grey;
+      text-align: left;
+    }
+    .visible {
+      display: block;
+    }
   </style>
 
   <noscript>
     <style>
       .service {
-        display: block;
+         display: block;
        }
     </style>
   </noscript>
@@ -30,17 +37,25 @@
 </head>
 
 <body>
-  Last train departs {{stop_name}} at:
-  {{#service}}
-  <div class="service {{service_id}} {{#visible_days}}{{day}} {{/visible_days}}">
-    {{service_id}}
-    {{#departure}}
-    <ul>
-      <li>{{friendly_time}} for {{headsign}}</li>
-    </ul>
-    {{/departure}}
-  </div>
-  {{/service}}
+  Last train departs {{stop_name}} at:<br/>
+  <br/>
+  <!-- Note: we can do the buttons all grouped at the top, as here, but that
+  makes the noscript version impossible to figure out. Would prefer to group
+  headings by buttons.  But should probably have both - headings for noscript
+  and buttons for clicking. -->
+  <div>
+    {{#service}}
+    <span class="service_selector" data-service-id="{{service_id}}">{{service_id}}</span>
+    {{/service}}
+    {{#service}}
+    <div class="service sid{{service_id}} {{#visible_days}}{{day}} {{/visible_days}}">
+      {{#departure}}
+      <ul>
+        <li>{{friendly_time}} for {{headsign}}</li>
+      </ul>
+      {{/departure}}
+    </div>
+    {{/service}}
   </div>
   <div class="last-valid">
     Data retrieved from <a href="http://bart.gov/">bart.gov</a> on {{fetch_date}}, valid until
