@@ -34,7 +34,7 @@ class StopNotFound(Exception):
   def __init__(self, message):
     Exception.__init__(self, message)
 
-class Stop(pystache.View):
+class Stop(object):
   def __init__(self, stop_name):
     self.conn = sqlite3.connect('bart.sqlite')
 
@@ -112,7 +112,7 @@ def get_stops(conn):
  for (stop_id, stop_name) in conn.execute('SELECT stop_id, stop_name FROM stops ORDER BY stop_name'):
    yield (stop_id, stop_name)
 
-class Index(pystache.View):
+class Index(object):
   def __init__(self, conn):
     self.conn = conn
     super(Index, self).__init__()
@@ -133,14 +133,16 @@ class Index(pystache.View):
 def main(argv):
   conn = sqlite3.connect('bart.sqlite')
 
+  renderer = pystache.Renderer()
+
   index_html = open("html/index.html", "w")
-  index_html.write(Index(conn).render())
+  index_html.write(renderer.render(Index(conn)))
   index_html.close()
 
   for (unused, stop_name) in get_stops(conn):
     f = open("html/" + urlify_name(stop_name) + ".html", "w")
     stop = Stop(urlify_name(stop_name))
-    f.write(stop.render())
+    f.write(renderer.render(stop))
     f.close()
 
 if __name__ == "__main__":
