@@ -1,4 +1,4 @@
-lastbart:
+lastbart: bart.sqlite
 	python lastbart.py
 
 bart.sqlite: google_transit.zip

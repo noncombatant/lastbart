@@ -9,6 +9,6 @@ window.onload = function () {
   twoHoursAgo = new Date(new Date() - (2 * 60 * 60 * 1000));
   dayOfWeek = twoHoursAgo.getDay();
 
-  addStyle(".vd" + dayOfWeek + " { display: block; }");
+  addStyle(".vd" + dayOfWeek + " { z-index: 10 }");
 }
 

@@ -13,17 +13,22 @@
       list-style-type: none;
     }
     .service {
-      display: none;
+      border: 1px solid grey;
+      top: 0;
+      left: 0;
+      background: white;
+      margin: 1em;
+    }
+    .service_id {
+      float: left;
+      margin: 1em;
+      padding-left: 1em;
+    }
+    .clear {
+      clear: both;
     }
   </style>
 
-  <noscript>
-    <style>
-      .service {
-        display: block;
-       }
-    </style>
-  </noscript>
   <script>
     {{>stop_js}}
   </script>
@@ -31,19 +36,23 @@
 
 <body>
   Last train departs {{stop_name}} at:
-  {{#service}}
-  <div class="service {{service_id}} {{#visible_days}}{{day}} {{/visible_days}}">
-    {{service_id}}
-    {{#departure}}
-    <ul>
-      <li>{{friendly_time}} for {{headsign}}</li>
-    </ul>
-    {{/departure}}
-  </div>
-  {{/service}}
-  </div>
-  <div class="last-valid">
-    Data retrieved from <a href="http://bart.gov/">bart.gov</a> on {{fetch_date}}, valid until
-    {{last_valid_date}}. <a href="http://bart.gov/stations/{{shortest_stop_id}}/schedule.aspx">Official schedule</a>
+  <div id=services>
+    {{#service}}
+    <div class=service_id>{{service_id}}</div>
+    {{/service}}
+    <div class=clear>
+    {{#service}}
+    <div class="service {{service_id}} {{#visible_days}}{{day}} {{/visible_days}}">
+      {{#departure}}
+      <ul>
+        <li>{{friendly_time}} for {{headsign}}</li>
+      </ul>
+      {{/departure}}
+      <div class="last-valid">
+        Data retrieved from <a href="http://bart.gov/">bart.gov</a> on {{fetch_date}}, valid until
+        {{last_valid_date}}. <a href="http://bart.gov/stations/{{shortest_stop_id}}/schedule.aspx">Official schedule</a>
+      </div>
+    </div>
+    {{/service}}
   </div>
 </body>
