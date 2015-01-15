@@ -9,6 +9,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
 
   <style>
+    body {
+      max-width: 25em;
+    }
     ul {
       list-style-type: none;
     }
@@ -17,12 +20,18 @@
       top: 0;
       left: 0;
       background: white;
-      margin: 1em;
+      padding: 0.5em;
+      display: none;
+    }
+    .service.selected {
+      display: block;
     }
     .service_id {
       float: left;
       margin: 1em;
-      padding-left: 1em;
+    }
+    .service_id.selected {
+      border: 1px solid grey;
     }
     .clear {
       clear: both;
@@ -38,9 +47,9 @@
   Last train departs {{stop_name}} at:
   <div id=services>
     {{#service}}
-    <div class=service_id>{{service_id}}</div>
+    <div class="service_id {{#visible_days}}svid_{{day}} {{/visible_days}}">{{service_id}}</div>
     {{/service}}
-    <div class=clear>
+    <div class=clear></div>
     {{#service}}
     <div class="service {{service_id}} {{#visible_days}}{{day}} {{/visible_days}}">
       {{#departure}}
@@ -48,6 +57,15 @@
         <li>{{friendly_time}} for {{headsign}}</li>
       </ul>
       {{/departure}}
+      <div class="transfers">
+      Note: Last departures are listed by where the train is ultimately going
+      (aka 'headsign'). If there's no listing for the train you want to get
+      on, or if the last departure is surprisingly early, you probably need to
+      take a different train and transfer. See the <a
+      href="https://www.bart.gov/stations">Station Map</a> for lines and
+      transfer stations.
+      </div>
+      <br/>
       <div class="last-valid">
         Data retrieved from <a href="http://bart.gov/">bart.gov</a> on {{fetch_date}}, valid until
         {{last_valid_date}}. <a href="http://bart.gov/stations/{{shortest_stop_id}}/schedule.aspx">Official schedule</a>
