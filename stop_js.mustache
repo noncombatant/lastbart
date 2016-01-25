@@ -23,7 +23,7 @@ function deselectAll() {
 }
 
 function selectServiceId(target) {
-  var serviceId = target.innerText;
+  var serviceId = target.innerHTML;
   deselectAll();
   addClass(target, 'selected');
   var service = byClass(serviceId)[0];
