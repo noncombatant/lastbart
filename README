@@ -1,0 +1,7 @@
+Setup:
+
+1. Install gtfsdb-load.
+2. apt-get install python-dev
+3. pip install pystache pysqlite2
+4. make
+5. firefox ./html/index.html
