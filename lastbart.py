@@ -7,7 +7,7 @@ import sys
 import stat
 import pystache
 import datetime
-from pysqlite2 import dbapi2 as sqlite3
+import sqlite3
 
 def urlify_name(name):
   name = re.sub(" BART$", "", name)

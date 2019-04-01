@@ -1,7 +1,10 @@
 Setup:
 
-1. Install gtfsdb-load.
-2. apt-get install python-dev
-3. pip install pystache pysqlite2
-4. make
+1. apt-get install python-dev
+2. Install gtfsdb-load:
+  a. Clone https://github.com/OpenTransitTools/gtfsdb
+  b. Comment out `psycopg2` under `install_requires` in setup.py.
+  c. python setup.py install --user
+3. pip install --user pystache
+4. PATH=~/.local/bin:$PATH make
 5. firefox ./html/index.html

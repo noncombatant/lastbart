@@ -1,4 +1,5 @@
 lastbart: bart.sqlite
+	mkdir -p html
 	python lastbart.py
 
 bart.sqlite: google_transit.zip
