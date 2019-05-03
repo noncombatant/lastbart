@@ -15,7 +15,7 @@ def urlify_name(name):
   name = re.sub("/", "-", name)
   name = re.sub("\\.", "", name)
   name = re.sub("[^0-9a-z-]", "-", name)
-  return name
+  return name + ".html"
 
 # Convert a time in GTFS format, e.g. "25:09:00" to a friendly format like
 # "1:09 am".
@@ -140,7 +140,7 @@ def main(argv):
   index_html.close()
 
   for (unused, stop_name) in get_stops(conn):
-    f = open("html/" + urlify_name(stop_name) + ".html", "w")
+    f = open("html/" + urlify_name(stop_name), "w")
     stop = Stop(urlify_name(stop_name))
     f.write(renderer.render(stop))
     f.close()
