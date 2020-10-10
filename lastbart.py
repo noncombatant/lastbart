@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import cgi
 import re
@@ -60,7 +60,7 @@ class Stop(object):
     # is a day, and we expect the transit feeds to have up-to-date data
     # available before they expire, this shouldn't be an issue.
     c = self.conn.execute("""SELECT end_date FROM calendar ORDER BY end_date DESC limit 1;""", ())
-    return c.next()[0]
+    return c.fetchone()[0]
 
   def fetch_date(self):
     dt = datetime.datetime.fromtimestamp(os.stat("google_transit.zip")[8])
@@ -109,8 +109,8 @@ class Stop(object):
       }
    
 def get_stops(conn):
- for (stop_id, stop_name) in conn.execute('SELECT stop_id, stop_name FROM stops ORDER BY stop_name'):
-   yield (stop_id, stop_name)
+  for (stop_id, stop_name) in conn.execute('SELECT stop_id, stop_name FROM stops ORDER BY stop_name'):
+    yield (stop_id, stop_name)
 
 class Index(object):
   def __init__(self, conn):
