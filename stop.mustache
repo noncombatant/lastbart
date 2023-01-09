@@ -13,21 +13,16 @@ body {
   line-height: 1.6;
 }
 .service {
-  border: 1px solid grey;
-  border-radius: 3px;
-  top: 0;
-  left: 0;
-  background: white;
-  padding: 0.5em;
   display: none;
 }
 .service.selected {
   display: block;
 }
+button {
+  font-size: inherit;
+}
 .service_id.selected {
-  border: 1px solid grey;
-  border-radius: 3px;
-  padding: 0.25em;
+  font-weight: bold;
 }
 </style>
 
@@ -87,21 +82,21 @@ window.onload = function () {
 
 <div id=services>
 
-{{#service}}<ul>
-<li><span class="service_id {{#visible_days}}svid_{{day}} {{/visible_days}}">{{service_id}}</span></li>
-</ul>{{/service}}
+{{#service}}</div>
+<button class="service_id {{#visible_days}}svid_{{day}} {{/visible_days}}">{{service_id}}</button>
+</div>{{/service}}
 
 {{#service}}<div class="service {{service_id}} {{#visible_days}}{{day}} {{/visible_days}}">
 
-{{#departure}}<ul>
-<li>{{friendly_time}} for {{headsign}}</li>
-</ul>{{/departure}}
+{{#departure}}
+<p>⏰ {{friendly_time}} for {{headsign}}</p>
+{{/departure}}
 
 <p>Note: Last departures are listed by where the train is ultimately going
 (a.k.a. ‘headsign’). If there’s no listing for the train you want to get on, or
 if the last departure is surprisingly early, you probably need to take a
 different train and transfer. See the <a
-href="https://www.bart.gov/stations">Station Map</a> for lines and transfer
+href="https://www.bart.gov/stations">station map</a> for lines and transfer
 stations.</p>
 
 <p>Data retrieved from <a href="https://bart.gov/">bart.gov</a> on
