@@ -6,6 +6,8 @@ Transit (BART) stops.
 Using Python, lastbart generates static HTML files that you can serve from any
 web server.
 
+You can see a live version on the web at [lastbart.at](https://lastbart.at/).
+
 ## Installation
 
 These steps assume a Debian- or Ubuntu-like Linux system — anything with `apt`.
