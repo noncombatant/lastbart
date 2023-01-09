@@ -1,76 +1,114 @@
 <!doctype html>
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Last BART from {{stop_name}}</title>
-  <meta name="description" content="Last BART departures from {{stop_name}}">
-  <meta name="author" content="Jacob Hoffman-Andrews">
+<html lang=en-us>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name="description" content="Last BART departures from {{stop_name}}">
+<meta name="author" content="Jacob Hoffman-Andrews and Chris Palmer">
+<title>Last BART departures from {{stop_name}}</title>
 
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+body {
+  font-family: sans-serif;
+  line-height: 1.6;
+}
+.service {
+  border: 1px solid grey;
+  border-radius: 3px;
+  top: 0;
+  left: 0;
+  background: white;
+  padding: 0.5em;
+  display: none;
+}
+.service.selected {
+  display: block;
+}
+.service_id.selected {
+  border: 1px solid grey;
+  border-radius: 3px;
+  padding: 0.25em;
+}
+</style>
 
-  <style>
-    body {
-      max-width: 25em;
-    }
-    ul {
-      list-style-type: none;
-    }
-    .service {
-      border: 1px solid grey;
-      top: 0;
-      left: 0;
-      background: white;
-      padding: 0.5em;
-      display: none;
-    }
-    .service.selected {
-      display: block;
-    }
-    .service_id {
-      float: left;
-      margin: 1em;
-    }
-    .service_id.selected {
-      border: 1px solid grey;
-    }
-    .clear {
-      clear: both;
-    }
-  </style>
+<script>
+function byClass(name) {
+  return document.getElementsByClassName(name);
+}
 
-  <script>
-    {{>stop_js}}
-  </script>
-</head>
+function addClass(target, clss) {
+  target.className += " " + clss;
+}
+
+function removeClass(target, clss) {
+  const regex = new RegExp(clss);
+  target.className = target.className.replace(regex, '')
+}
+
+function deselectAll() {
+  const elements = byClass('service');
+  for (let i = 0; i < elements.length; i++) {
+    removeClass(elements[i], 'selected');
+  }
+  const serviceIdElements = byClass('service_id');
+  for (let i = 0; i < serviceIdElements.length; i++) {
+    removeClass(serviceIdElements[i], 'selected');
+  }
+}
+
+function selectServiceId(target) {
+  const serviceId = target.innerHTML;
+  deselectAll();
+  addClass(target, 'selected');
+  const service = byClass(serviceId)[0];
+  addClass(service, 'selected');
+}
+
+window.onload = function () {
+  const twoHoursAgo = new Date(new Date() - (2 * 60 * 60 * 1000));
+  const dayOfWeek = twoHoursAgo.getDay();
+
+  const currentServiceId = byClass('svid_vd' + dayOfWeek)[0];
+  selectServiceId(currentServiceId);
+
+  const services = byClass('service_id');
+  for (let i = 0; i < services.length; i++) {
+    const s = services[i];
+    s.onclick = function(e) {
+      selectServiceId(e.target);
+    }
+  }
+}
+</script>
 
 <body>
-  Last train departs {{stop_name}} at:
-  <div id=services>
-    {{#service}}
-    <div class="service_id {{#visible_days}}svid_{{day}} {{/visible_days}}">{{service_id}}</div>
-    {{/service}}
-    <div class=clear></div>
-    {{#service}}
-    <div class="service {{service_id}} {{#visible_days}}{{day}} {{/visible_days}}">
-      {{#departure}}
-      <ul>
-        <li>{{friendly_time}} for {{headsign}}</li>
-      </ul>
-      {{/departure}}
-      <div class="transfers">
-      Note: Last departures are listed by where the train is ultimately going
-      (aka 'headsign'). If there's no listing for the train you want to get
-      on, or if the last departure is surprisingly early, you probably need to
-      take a different train and transfer. See the <a
-      href="https://www.bart.gov/stations">Station Map</a> for lines and
-      transfer stations.
-      </div>
-      <br/>
-      <div class="last-valid">
-        Data retrieved from <a href="http://bart.gov/">bart.gov</a> on {{fetch_date}}, valid until
-        {{last_valid_date}}. <a href="http://bart.gov/stations/{{shortest_stop_id}}/schedule.aspx">Official schedule</a>
-      </div>
-    </div>
-    {{/service}}
-  </div>
+
+<p>Last train departs {{stop_name}} at:</p>
+
+<div id=services>
+
+{{#service}}<ul>
+<li><span class="service_id {{#visible_days}}svid_{{day}} {{/visible_days}}">{{service_id}}</span></li>
+</ul>{{/service}}
+
+{{#service}}<div class="service {{service_id}} {{#visible_days}}{{day}} {{/visible_days}}">
+
+{{#departure}}<ul>
+<li>{{friendly_time}} for {{headsign}}</li>
+</ul>{{/departure}}
+
+<p>Note: Last departures are listed by where the train is ultimately going
+(a.k.a. ‘headsign’). If there’s no listing for the train you want to get on, or
+if the last departure is surprisingly early, you probably need to take a
+different train and transfer. See the <a
+href="https://www.bart.gov/stations">Station Map</a> for lines and transfer
+stations.</p>
+
+<p>Data retrieved from <a href="http://bart.gov/">bart.gov</a> on
+{{fetch_date}}, valid until {{last_valid_date}}. See also the <a
+href="http://bart.gov/stations/{{shortest_stop_id}}/schedule.aspx">Official
+schedule</a>.</p>
+
+</div>{{/service}}
+
+</div>
 </body>
