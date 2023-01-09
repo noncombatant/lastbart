@@ -10,12 +10,13 @@
 body {
   font-family: sans-serif;
   line-height: 1.6;
+  font-size: 130%;
 }
 </style>
 <body>
-<ul>
+<p>Lastbart tells you when the last <a href="https://bart.gov/">BART</a> train
+leaves the station.</p>
 {{#stop}}
-<li><a href='{{stop_name_urlified}}'>{{stop_name}}</a></li>
+<p>🚉 <a href='{{stop_name_urlified}}'>{{stop_name}}</a></p>
 {{/stop}}
-</ul>
 </body>

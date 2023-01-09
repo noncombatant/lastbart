@@ -11,6 +11,7 @@
 body {
   font-family: sans-serif;
   line-height: 1.6;
+  font-size: 130%;
 }
 .service {
   display: none;
@@ -78,12 +79,12 @@ window.onload = function () {
 
 <body>
 
-<p>Last train departs {{stop_name}} at:</p>
+<p>The last train departs {{stop_name}} at:</p>
 
 <div id=services>
 
-{{#service}}</div>
-<button class="service_id {{#visible_days}}svid_{{day}} {{/visible_days}}">{{service_id}}</button>
+{{#service}}<div>
+<p><button class="service_id {{#visible_days}}svid_{{day}} {{/visible_days}}">{{service_id}}</button></p>
 </div>{{/service}}
 
 {{#service}}<div class="service {{service_id}} {{#visible_days}}{{day}} {{/visible_days}}">
@@ -92,10 +93,10 @@ window.onload = function () {
 <p>⏰ {{friendly_time}} for {{headsign}}</p>
 {{/departure}}
 
-<p>Note: Last departures are listed by where the train is ultimately going
-(a.k.a. ‘headsign’). If there’s no listing for the train you want to get on, or
-if the last departure is surprisingly early, you probably need to take a
-different train and transfer. See the <a
+<p><b>Note:</b> Last departures are listed by where the train is ultimately
+going. (This is called the <i>headsign</i>.) If there’s no listing for the train
+you want to get on, or if the last departure is surprisingly early, you probably
+need to take a different train and transfer. See the <a
 href="https://www.bart.gov/stations">station map</a> for lines and transfer
 stations.</p>
 
