@@ -1,18 +1,9 @@
-<!doctype html>
-<html lang=en-us>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<meta name="description" content="Last BART departures from {{stop_name}}">
-<meta name="author" content="Jacob Hoffman-Andrews and Chris Palmer">
-<link rel=icon href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚉</text></svg>">
+{{>preamble}}
+<meta name=description content="Last BART departures from {{stop_name}}">
 <title>Last BART departures from {{stop_name}}</title>
 
 <style>
-body {
-  font-family: sans-serif;
-  line-height: 1.6;
-  font-size: 130%;
-}
+{{>style}}
 .service {
   display: none;
 }
@@ -28,53 +19,7 @@ button {
 </style>
 
 <script>
-function byClass(name) {
-  return document.getElementsByClassName(name);
-}
-
-function addClass(target, clss) {
-  target.className += " " + clss;
-}
-
-function removeClass(target, clss) {
-  const regex = new RegExp(clss);
-  target.className = target.className.replace(regex, '')
-}
-
-function deselectAll() {
-  const elements = byClass('service');
-  for (let i = 0; i < elements.length; i++) {
-    removeClass(elements[i], 'selected');
-  }
-  const serviceIdElements = byClass('service_id');
-  for (let i = 0; i < serviceIdElements.length; i++) {
-    removeClass(serviceIdElements[i], 'selected');
-  }
-}
-
-function selectServiceId(target) {
-  const serviceId = target.innerHTML;
-  deselectAll();
-  addClass(target, 'selected');
-  const service = byClass(serviceId)[0];
-  addClass(service, 'selected');
-}
-
-window.onload = function () {
-  const twoHoursAgo = new Date(new Date() - (2 * 60 * 60 * 1000));
-  const dayOfWeek = twoHoursAgo.getDay();
-
-  const currentServiceId = byClass('svid_vd' + dayOfWeek)[0];
-  selectServiceId(currentServiceId);
-
-  const services = byClass('service_id');
-  for (let i = 0; i < services.length; i++) {
-    const s = services[i];
-    s.onclick = function(e) {
-      selectServiceId(e.target);
-    }
-  }
-}
+{{>stop_js}}
 </script>
 
 <body>
@@ -108,4 +53,5 @@ bart.gov schedule</a>.</p>
 </div>{{/service}}
 
 </div>
+{{>footer}}
 </body>
