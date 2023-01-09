@@ -1,9 +1,9 @@
-# lastbart
+# Lastbart
 
-A simple web site to show the last departure times per day for Bay Area Rapid
-Transit (BART) stops.
+Lastbart is a simple web site to show the last departure times of the day for
+each Bay Area Rapid Transit (BART) stop.
 
-Using Python, lastbart generates static HTML files that you can serve from any
+Using Python, Lastbart generates static HTML files that you can serve from any
 web server.
 
 You can see a live version on the web at [lastbart.at](https://lastbart.at/).
