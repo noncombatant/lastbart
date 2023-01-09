@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 import cgi
 import re
@@ -96,7 +96,7 @@ class Stop(object):
     c = self.conn.execute("""
         SELECT MAX(departure_time), stop_headsign, service_id
         FROM stop_times JOIN trips ON stop_times.trip_id=trips.trip_id
-        WHERE stop_id in (%s) AND service_id=?
+        WHERE stop_id in (%s) AND service_id=? AND stop_headsign LIKE '%%'
         GROUP BY stop_headsign
         ORDER by MAX(departure_time) DESC;
       """ % placeholders, values)
@@ -109,7 +109,7 @@ class Stop(object):
       }
    
 def get_stops(conn):
-  for (stop_id, stop_name) in conn.execute('SELECT stop_id, stop_name FROM stops ORDER BY stop_name'):
+  for (stop_id, stop_name) in conn.execute("SELECT stop_id, stop_name FROM stops WHERE stop_name NOT LIKE '%Enter/Exit%' ORDER BY stop_name"):
     yield (stop_id, stop_name)
 
 class Index(object):
