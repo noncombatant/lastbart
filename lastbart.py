@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 
 import cgi
-import re
-import os
-import sys
-import stat
-import pystache
 import datetime
+import os
+import pystache
+import re
 import sqlite3
+import stat
+import sys
 
 
 def urlify_name(name):
@@ -18,16 +18,17 @@ def urlify_name(name):
     name = re.sub("[^0-9a-z-]", "-", name)
     return name + ".html"
 
-# Convert a time in GTFS format, e.g. "25:09:00" to a friendly format like
-# "1:09 am".
-
 
 def friendly_time(time_string):
+    """
+    Convert a time in GTFS format, e.g. "25:09:00", to a friendly format like "1:09
+    AM".
+    """
     (hour, minute, second) = time_string.split(":")
     if (int(hour) / 12) % 2:
-        am_pm = "pm"
+        am_pm = "PM"
     else:
-        am_pm = "am"
+        am_pm = "AM"
     hour = int(hour) % 12
     if hour == 0:
         hour = 12
