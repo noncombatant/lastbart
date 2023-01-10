@@ -24,13 +24,15 @@ button {
 
 <body>
 
-<p>The last train departs {{stop_name}} at:</p>
+<p>On:</p>
 
 <div id=services>
 
-{{#service}}<div>
-<p><button class="service_id {{#visible_days}}svid_{{day}} {{/visible_days}}">{{service_id}}</button></p>
-</div>{{/service}}
+{{#service}}
+<button class="service_id {{#visible_days}}svid_{{day}} {{/visible_days}}">{{service_id}}</button>
+{{/service}}
+
+<p>the last train departs {{stop_name}} at:</p>
 
 {{#service}}<div class="service {{service_id}} {{#visible_days}}{{day}} {{/visible_days}}">
 

@@ -35,6 +35,15 @@ def friendly_time(time_string):
     return "%d:%s %s" % (hour, minute, am_pm)
 
 
+def friendly_service_id(service_id):
+    """
+    Extract the human-readable part of the service_id.
+    """
+    m = re.search(r"(Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Weekday)",
+                  service_id)
+    return service_id[m.start():m.end()]
+
+
 class StopNotFound(Exception):
     def __init__(self, message):
         Exception.__init__(self, message)
@@ -99,9 +108,8 @@ class Stop(object):
                     x[0]}, visible_days_tuples)
 
             departures = list(self.list_departures(service_id))
-
             if len(departures) > 0:
-                yield {"service_id": service_id,
+                yield {"service_id": friendly_service_id(service_id),
                        "visible_days": visible_days,
                        "departure": departures}
 
@@ -115,11 +123,23 @@ class Stop(object):
             ORDER by MAX(departure_time) DESC""" % placeholders
         c = self.conn.execute(q, values)
 
+        # We will make the `service_id` friendly, but to be extra careful we
+        # want to make sure that for each departure, each friendly ID is
+        # unique. Currently, this is true in the data. But it's good to check,
+        # since if it ever weren't true, we'd have to use the distinct but
+        # non-friendly IDs.
+        uniques = set()
+
         for (departure_time, stop_headsign, service_id) in c:
+            fsid = friendly_service_id(service_id)
+            key = str(departure_time) + str(stop_headsign) + str(service_id)
+            if key in uniques:
+                raise "BUG: Making the `service_id`s friendly caused a collision."
+            uniques.add(key)
             yield {
                 "friendly_time": friendly_time(departure_time),
                 "headsign": stop_headsign,
-                "service_id": service_id
+                "service_id": fsid
             }
 
 
