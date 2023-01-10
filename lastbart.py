@@ -77,10 +77,13 @@ class Stop(object):
         return sorted(self.all_stop_ids, key=lambda x: len(x))[0]
 
     def service(self):
-        q = """SELECT service_id,
-            sunday, monday, tuesday, wednesday, thursday, friday, saturday
-            FROM calendar"""
+        q = """SELECT date('now', 'localtime') as d,
+            service_id, sunday, monday, tuesday, wednesday, thursday, friday, saturday
+            FROM calendar
+            WHERE calendar.start_date <= d and calendar.end_date >= d"""
         for values in self.conn.execute(q):
+            # Trim the `d` column:
+            values = values[1:]
             service_id = values[0]
             # We have a bit for each weekday indicating whether this schedule is
             # visible on that day.  Zip those bits with a numerical index
@@ -107,7 +110,7 @@ class Stop(object):
         values = self.all_stop_ids + [service_id]
         q = """SELECT MAX(departure_time), stop_headsign, service_id
             FROM stop_times JOIN trips ON stop_times.trip_id = trips.trip_id
-            WHERE stop_id in (% s) AND service_id =? AND stop_headsign LIKE '%%'
+            WHERE stop_id in (%s) AND service_id =? AND stop_headsign LIKE '%%'
             GROUP BY stop_headsign
             ORDER by MAX(departure_time) DESC""" % placeholders
         c = self.conn.execute(q, values)
